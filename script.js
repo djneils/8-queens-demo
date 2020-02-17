@@ -10,20 +10,26 @@ let board = [
 ]
 let checker, queen
 let startQueenY = 0
-
+let boardWidth,cellWidth
 function preload() {
   queen = loadImage('queen.png')
 }
 
 function setup() {
-  createCanvas(400, 400)
+  createCanvas(windowWidth,windowHeight)
+  boardWidth=height
+  cellWidth=boardWidth/8
   textAlign(CENTER, CENTER)
   noStroke()
 
 }
-
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+    boardWidth=height
+  cellWidth=boardWidth/8
+}
 function draw() {
-  background(100)
+  background(255)
   let black = true
 
   noStroke()
@@ -37,9 +43,9 @@ function draw() {
         fill(255)
       }
       black = !black
-      rect(col * 50, row * 50, 50, 50)
+      rect(col * cellWidth, row * cellWidth, cellWidth, cellWidth)
       if (board[row][col] == 1) {
-        image(queen, col * 50 + 5, row * 50 + 5, 40, 40)
+        image(queen, col * cellWidth + cellWidth*0.1, row * cellWidth + (cellWidth*0.1), cellWidth*0.8, cellWidth*0.8)
       }
 
     }
@@ -48,21 +54,22 @@ function draw() {
   noFill()
   stroke(255, 0, 0)
   strokeWeight(4)
-  startQueenY = floor(lerp(startQueenY, floor(mouseY / 50) * 50, 0.25))
-  if (abs(startQueenY - (floor(mouseY / 50) * 50)) < 10) {
-    startQueenY = floor(mouseY / 50) * 50
+  startQueenY = floor(lerp(startQueenY, floor(mouseY / cellWidth) * cellWidth, 0.25))
+  if (abs(startQueenY - (floor(mouseY / cellWidth) * cellWidth)) < 10) {
+    startQueenY = floor(mouseY / cellWidth) * cellWidth
   }
-  startQueenY = constrain(startQueenY, 0, 350)
+  startQueenY = constrain(startQueenY, 0, height-cellWidth)
   tint(155, 164)
 
-  image(queen, 5, startQueenY + 5, 40, 40)
+  image(queen,cellWidth*0.1, startQueenY + cellWidth*0.1, cellWidth*0.8, cellWidth*0.8)
+  //image(queen, col * cellWidth + cellWidth*0.1, row * cellWidth + (cellWidth*0.1), cellWidth*0.8, cellWidth*0.8)
   noTint()
   stroke(0)
   strokeWeight(1)
   stroke(120)
   noFill()
   strokeWeight(2)
-  rect(0, 0, width, height)
+  rect(0, 0, boardWidth, boardWidth)
 }
 function mousePressed() {
   let r = floor(mouseY / 50)
